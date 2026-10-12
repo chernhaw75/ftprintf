@@ -75,6 +75,26 @@ static int	ft_putchar(char c)
 	return (1);
 }
 
+static	int ft_puthex_len(unsigned int n, int upper)
+{
+	int	count;
+	char *base;
+	char *uppercase;
+	char *lowercase;
+
+	uppercase= "0123456789ABCDEF";
+	lowercase = "0123456789abcdef";
+	if (upper)
+		base = uppercase;
+	else
+		base = lowercase;
+	count = 0;
+	if (n >= 16)
+		count += ft_puthex_len(n / 16, upper);
+	count += ft_putchar_len(base[n % 16]);
+	return (count);	
+}
+
 static	int	ft_format_variable(char spec, va_list args)
 {
 	int	count;
@@ -90,36 +110,10 @@ static	int	ft_format_variable(char spec, va_list args)
 		count += ft_putnbr_len(va_arg(args, int));
 	if (spec == 'u')	
 		count += ft_putnbr_unsigned_len(va_arg(args, unsigned int));
-	if (spec == 'x' || spec =='X')
-	{
-		char* x_str;
-		int	i;
-
-		x_str = ft_itoa(va_arg(args, int));
-		i = 0;
-		if (spec == 'x')
-		{
-			while (x_str[i])
-			{
-				x_str[i] = ft_toupper(x_str[i]);
-				i++;
-				count++;
-			}	
-		}	
-		else
-		{
-			while (x_str[i])
-			{
-				x_str[i] = ft_tolower(x_str[i]);
-				i++;
-				count++;
-			}
-
-		}
-	
-		count++;
-	}
-	
+	if (spec == 'x')
+		count += ft_puthex_len(va_arg(args, int), 0);
+	if (spec == 'X')
+		count += ft_puthex_len(va_arg(args, int), 1);
 	return (count);
 }
 
@@ -162,9 +156,9 @@ int main(int argc, char** argv)
 
 	int count = 20;
 	char *s ="cat";
-	int hexa = 3;
+	int hexa = 10;
 
-	ft_printf ("there are %d %s jumping obver the sleeping dog and the dog barks %x", count, s, hexa);
+	ft_printf ("there are %d %s jumping obver the sleeping dog and the dog barks %x times", count, s, hexa);
 
 	return 0;
 
