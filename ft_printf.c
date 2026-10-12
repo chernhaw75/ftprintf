@@ -37,6 +37,19 @@ static	int ft_putstr_len(char* str)
 	return (i);
 }
 
+static int	ft_puthex_ul_len(unsigned long n)
+{
+	int	count;
+	char	*base;
+
+	base = "0123456789abcdef";
+	count = 0;
+	if (n > 16)
+		count += ft_puthex_ul_len(n / 16);
+	count += ft_putchar_len(base[n % 16]);
+	return (count);
+}
+
 static int	ft_putnbr_unsigned_len(unsigned int n)
 {
 	int	count;
@@ -73,6 +86,20 @@ static int	ft_putchar(char c)
 	
 	write(1, &c, 1);
 	return (1);
+}
+
+
+static	int	ft_putptr_len(void *ptr)
+{
+	unsigned long	addr;
+	int	count;
+
+	addr = (unsigned long)ptr;
+	if (addr == 0)
+		return (write(1,"(nil)",5));
+	count = write(1, "0x", 2);
+	count += ft_puthex_ul_len(addr);
+	return (count);
 }
 
 static	int ft_puthex_len(unsigned int n, int upper)
@@ -114,6 +141,8 @@ static	int	ft_format_variable(char spec, va_list args)
 		count += ft_puthex_len(va_arg(args, int), 0);
 	if (spec == 'X')
 		count += ft_puthex_len(va_arg(args, int), 1);
+	if (spec == 'p')
+		count += ft_putptr_len(va_arg(args, void *));
 	return (count);
 }
 
@@ -158,7 +187,7 @@ int main(int argc, char** argv)
 	char *s ="cat";
 	int hexa = 10;
 
-	ft_printf ("there are %d %s jumping obver the sleeping dog and the dog barks %x times", count, s, hexa);
+	ft_printf ("there are %d %s jumping obver the sleeping dog and the dog barks %x times at memory %p", count, s, hexa, (void*)&s);
 
 	return 0;
 
