@@ -1,16 +1,18 @@
 NAME	= libftprintf.a
 
-CC	= cc
+CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
-AR	= ar rcs
-RM	= rm -f
+AR		= ar rcs
+RM		= rm -f
 
-# List every source file explicitly (no wildcards)
-SRCS	= ft_printf.c
-# Add more files like this (note the backslash):
-# SRCS	= ft_printf.c \
-#	  ft_print_char.c \
-#	  ft_print_str.c
+SRCS	= ft_printf.c \
+		  ft_putchar_len.c \
+		  ft_putstr_len.c \
+		  ft_putnbr_len.c \
+		  ft_putnbr_unsigned_len.c \
+		  ft_puthex_len.c \
+		  ft_puthex_ul_len.c \
+		  ft_putptr_len.c
 
 OBJS	= $(SRCS:.c=.o)
 
